@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Comunicado Programado</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .header {
+      background-color: #1e3d6b;
+      width: 100%;
+      height: 80px;
+      border-bottom-left-radius: 40px;
+      border-bottom-right-radius: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .header h1 {
+      color: white;
+      font-size: 24px;
+      font-weight: 600;
+      font-style: italic;
+    }
+
+    .voltar {
+      position: absolute;
+      left: 20px;
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .voltar:hover {
+      text-decoration: underline;
+    }
+
+    h2 {
+      margin: 30px 0 20px;
+      font-size: 20px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .input-campo {
+      margin-bottom: 15px;
+      width: 80%;
+      max-width: 350px;
+    }
+
+    .input-campo label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .input-campo input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #aaa;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .card-textarea {
+      border: 1.5px solid #000;
+      border-radius: 12px;
+      width: 80%;
+      max-width: 350px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+
+    .card-textarea label {
+      font-weight: 500;
+      display: block;
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      border: none;
+      outline: none;
+      resize: none;
+      font-size: 14px;
+      font-family: 'Poppins', sans-serif;
+      background-color: transparent;
+      text-align: center;
+    }
+
+    .btn-enviar {
+      background-color: #1e3d6b;
+      color: white;
+      padding: 12px 40px;
+      border: none;
+      border-radius: 20px;
+      font-size: 16px;
+      font-weight: 600;
+      box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn-enviar:hover:enabled {
+      background-color: #163258;
+    }
+
+    .btn-enviar:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a href="tela_enviar_comunicado.html" class="voltar">Voltar</a>
+    <h1>unicarona</h1>
+  </div>
+
+  <h2>Comunicado programado</h2>
+
+  <div class="input-campo">
+    <label for="data">Inserir data</label>
+    <input type="date" id="data" />
+  </div>
+
+  <div class="input-campo">
+    <label for="hora">Inserir horário</label>
+    <input type="time" id="hora" />
+  </div>
+
+  <div class="card-textarea">
+    <textarea id="mensagem" placeholder="Digite o comunicado aqui..."></textarea>
+  </div>
+
+  <button class="btn-enviar" id="btnEnviar" disabled>Agendar</button>
+
+  <script>
+    const dataInput = document.getElementById("data");
+    const horaInput = document.getElementById("hora");
+    const mensagem = document.getElementById("mensagem");
+    const btnEnviar = document.getElementById("btnEnviar");
+
+    function verificarCampos() {
+      const mensagemValida = mensagem.value.trim() !== "";
+      const dataValida = dataInput.value !== "";
+      const horaValida = horaInput.value !== "";
+      btnEnviar.disabled = !(mensagemValida && dataValida && horaValida);
+    }
+
+    mensagem.addEventListener("input", verificarCampos);
+    dataInput.addEventListener("input", verificarCampos);
+    horaInput.addEventListener("input", verificarCampos);
+
+    btnEnviar.addEventListener("click", () => {
+      const data = dataInput.value;
+      const hora = horaInput.value;
+      const texto = mensagem.value.trim();
+
+      alert(`Comunicado agendado para ${data} às ${hora}:\n\n"${texto}"`);
+      window.location.href = "tela_home_motorista.html";
+    });
+  </script>
+</body>
+</html>

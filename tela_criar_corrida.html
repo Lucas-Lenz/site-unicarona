@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Criar Corrida</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .header {
+      background-color: #1e3d6b;
+      width: 100%;
+      height: 80px;
+      border-bottom-left-radius: 40px;
+      border-bottom-right-radius: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      color: white;
+      font-size: 24px;
+      font-weight: 600;
+      font-style: italic;
+    }
+
+    .voltar {
+      position: absolute;
+      left: 20px;
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .voltar:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 360px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+
+    .input-group {
+      width: 100%;
+      margin-bottom: 15px;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 14px;
+      color: #1e3d6b;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="time"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 20px;
+      border: 2px solid #1e3d6b;
+      font-size: 14px;
+      background-color: #f1f1f1;
+      outline: none;
+    }
+
+    .switch-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    .switch input:checked + .slider {
+      background-color: #4caf50;
+    }
+
+    .switch input:checked + .slider:before {
+      transform: translateX(16px);
+    }
+
+    .tooltip {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 200px;
+      background-color: #555;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .submit-btn {
+      width: 60%;
+      padding: 12px;
+      background-color: #1e3d6b;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s;
+      margin-top: 20px;
+    }
+
+    .submit-btn:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .success-message {
+      display: none;
+      opacity: 0;
+      width: 100%;
+      text-align: center;
+      background-color: #d4edda;
+      color: #155724;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-weight: bold;
+      animation: fadeIn 0.5s ease-in-out forwards;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a href="tela_home_motorista.html" class="voltar">Voltar</a>
+    <h1>unicarona</h1>
+  </div>
+
+  <div id="sucessoMsg" class="success-message">
+    ✅ Corrida cadastrada com sucesso!
+  </div>
+  
+  <form class="container" id="formCorrida">
+    <div class="input-row">
+      <div class="input-group">
+        <label for="dataInput">Inserir data</label>
+        <input type="date" id="dataInput">
+      </div>
+      <div class="input-group">
+        <label for="horaInput">Inserir horário</label>
+        <input type="time" id="horaInput">
+      </div>
+    </div>
+
+    <div class="input-row">
+      <div class="input-group">
+        <label for="valorInput">Inserir valor</label>
+        <input type="number" id="valorInput" placeholder="R$">
+      </div>
+      <div class="input-group">
+        <label for="limiteInput">Limite passageiros</label>
+        <input type="number" id="limiteInput">
+      </div>
+    </div>
+
+    <div class="input-row">
+      <div class="input-group">
+        <label for="acessibilidadeSelect">Acessibilidade</label>
+        <select id="acessibilidadeSelect">
+          <option value="">Selecione</option>
+          <option value="sim">Sim</option>
+          <option value="nao">Não</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label>Filtro passageiro mulher <span class="tooltip">*
+          <span class="tooltiptext">Disponível apenas para motoristas do sexo feminino</span>
+        </span></label>
+        <label class="switch">
+          <input type="checkbox" id="filtroMulher">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label for="origemInput">Origem</label>
+      <input type="text" id="origemInput" placeholder="Local de partida">
+    </div>
+
+    <div class="input-group">
+      <label for="destinoInput">Destino</label>
+      <input type="text" id="destinoInput" placeholder="Local de chegada">
+    </div>
+
+    <button type="submit" class="submit-btn" id="btnConcluir" disabled>Concluir</button>
+  </form>
+
+  <script>
+    const form = document.getElementById("formCorrida");
+    const btnConcluir = document.getElementById("btnConcluir");
+    const sucessoMsg = document.getElementById("sucessoMsg");
+
+    const camposObrigatorios = [
+      "dataInput",
+      "horaInput",
+      "valorInput",
+      "limiteInput",
+      "acessibilidadeSelect",
+      "origemInput",
+      "destinoInput"
+    ];
+
+    function validarCampos() {
+      let todosPreenchidos = camposObrigatorios.every(id => {
+        const el = document.getElementById(id);
+        return el && el.value.trim() !== "";
+      });
+      btnConcluir.disabled = !todosPreenchidos;
+    }
+
+    camposObrigatorios.forEach(id => {
+      const el = document.getElementById(id);
+      el.addEventListener("input", validarCampos);
+    });
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      sucessoMsg.style.display = "block";
+      sucessoMsg.style.animation = "fadeIn 0.5s ease-in-out forwards";
+
+      setTimeout(() => {
+        window.location.href = "tela_home_motorista.html";
+      }, 3000);
+    });
+  </script>
+</body>
+</html>

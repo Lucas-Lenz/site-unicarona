@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sobre nós</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .header {
+      background-color: #1e3d6b;
+      width: 100%;
+      height: 80px;
+      border-bottom-left-radius: 40px;
+      border-bottom-right-radius: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      color: white;
+      font-size: 24px;
+      font-weight: 600;
+      font-style: italic;
+    }
+
+    .voltar {
+      position: absolute;
+      left: 20px;
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .voltar:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 360px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .titulo {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .membros {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      width: 100%;
+    }
+
+    .membro {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .membro img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 120px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .descricao {
+      text-align: center;
+      font-size: 12px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <a id="voltarBtn" href="#" class="voltar">Voltar</a>
+    <h1>unicarona</h1>
+  </div>
+
+  <div class="container">
+    <h1 class="titulo">Sobre nós</h1>
+
+    <div style="max-width: 700px; margin: 20px auto; padding: 0 20px; text-align: justify; font-size: 16px; color: #1e3d6b; line-height: 1.6;">
+      Somos 4 estudantes de Sistemas de Informação da UNIRIO que propuseram um projeto de melhoria de mobilidade urbana para a aula de Interação Humano-Computador.<br><br>
+      Ir até a universidade nem sempre é uma tarefa fácil. Muitos estudantes enfrentam diversos obstáculos durante o percurso, como preços elevados de transportes e tempo longo de espera no trânsito. Diante disso, sugerimos um aplicativo que possibilitaria aos estudantes mais privilegiados nessa rotina a oferecer uma carona solidária aos demais, denominado <strong>"UniCarona"</strong>.
+    </div>
+
+    <div class="membros">
+      <div class="membro">
+        <img src="foto_lucas.png" alt="Lucas Lima">
+        <div class="descricao"><h2>Lucas Lima</h2><span style="font-size: 14px;">Economista</span></div>
+      </div>
+      <div class="membro">
+        <img src="foto_erick.png" alt="Erick Silva">
+        <div class="descricao"><h2>Erick Oliveira</h2><span style="font-size: 14px;">Administrador</span></div>
+      </div>
+      <div class="membro">
+        <img src="foto_gustavo.png" alt="Gustavo Barbosa">
+        <div class="descricao"><h2>Gustavo Barbosa</h2><span style="font-size: 14px;">Gamer</span></div>
+      </div>
+      <div class="membro">
+        <img src="foto_juceia.png" alt="Membro 4">
+        <div class="descricao"><h2>Jusceia Brites</h2><span style="font-size: 14px;">Motorista</span></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const origem = params.get("origem");
+
+    const voltarBtn = document.getElementById("voltarBtn");
+
+    if (origem === "tela_home_motorista") {
+      voltarBtn.href = "tela_home_motorista.html";
+    } else if (origem === "tela_home_passageiro") {
+      voltarBtn.href = "tela_home_passageiro.html";
+    } else {
+      voltarBtn.href = "tela_home_passageiro.html"; // fallback
+    }
+  </script>
+
+</body>
+</html>

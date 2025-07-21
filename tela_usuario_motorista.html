@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Perfil do Motorista</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #fff;
+      margin: 0;
+      padding: 20px 20px 0 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Topo fixo com botão voltar à esquerda */
+    .header {
+      background-color: #1e3d6b;
+      width: 100%;
+      height: 70px;
+      border-bottom-left-radius: 50px;
+      border-bottom-right-radius: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 0 20px;
+      box-sizing: border-box;
+      color: white;
+      font-weight: 700;
+      font-size: 24px;
+      font-style: italic;
+      z-index: 1000;
+    }
+
+    /* Botão voltar fixo à esquerda no topo */
+    .back-button {
+      position: absolute;
+      left: 20px;
+      color: white;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      user-select: none;
+      text-decoration: none;
+    }
+
+    .back-button:hover {
+      text-decoration: underline;
+    }
+
+    /* Espaço para o topo fixo */
+    .spacer-top {
+      height: 70px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    /* Container principal centralizado */
+    .container {
+      width: 100%;
+      max-width: 400px;
+      box-sizing: border-box;
+      padding: 0 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Driver info e botões */
+    .driver-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .driver-name-role {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .driver-name-role span {
+      font-weight: 600;
+      color: #555;
+    }
+
+    .right-icons {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .favorite-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      font-size: 18px;
+      user-select: none;
+      color: black;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .favorite-btn.active {
+      background-color: red;
+      color: white;
+      border-color: red;
+    }
+
+    .foto-perfil {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      
+    
+    }
+
+    .rating {
+      font-size: 1rem;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      color: black;
+    }
+
+    .rating .star {
+      color: black;
+      font-size: 18px;
+    }
+
+    .box {
+      border: 2px solid black;
+      border-radius: 12px;
+      padding: 20px;
+      font-weight: 700;
+      text-align: center;
+      user-select: none;
+      min-height: 80px;
+    }
+
+    .btn {
+      border: 2px solid black;
+      border-radius: 12px;
+      padding: 15px;
+      font-weight: 700;
+      background-color: white;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #f0f0f0;
+    }
+
+    .card {
+      border: 2px solid #000;
+      border-radius: 16px;
+      padding: 16px;
+      width: 90%;
+      height: 100px;
+      max-width: 400px;
+      box-shadow: 2px 4px 6px rgba(0,0,0,0.1);
+    }
+    .card p {
+      margin: 6px 0;
+    }
+
+
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="tela_abrir.html" class="back-button" id="voltarBtn">Voltar</a>
+    unicarona
+  </header>
+
+  <div class="spacer-top"></div>
+
+  <main class="container">
+
+    <section class="driver-info">
+      <div class="driver-name-role">
+        <div>Douglas Eduardo Silva</div>
+        <span>Motorista</span>
+      </div>
+      <div class="right-icons">
+        <div id="favorite" class="favorite-btn" aria-label="Favoritar motorista" role="button" tabindex="0">♡</div>
+        <img class ="foto-perfil" src="https://randomuser.me/api/portraits/men/56.jpg" ></img>
+        <div class="rating" aria-label="Avaliação do motorista">
+        </div>
+      </div>
+    </section>
+    <div class = "card">
+        <p>Sou aluno de terceiro período em engenharia de produção, tenho aulas em todos os dias menos sexta e segunda. Gosto do silencio então nao sou de conversar muito.</p>
+
+    </div>
+
+    <button class="btn" onclick="window.location.href='tela_chat_douglas.html'" type="button">💬Abrir chat</a></button>
+
+  </main>
+
+  <script>
+    const favoriteBtn = document.getElementById('favorite');
+    favoriteBtn.addEventListener('click', () => {
+      favoriteBtn.classList.toggle('active');
+      favoriteBtn.textContent = favoriteBtn.classList.contains('active') ? '♥' : '♡';
+    });
+
+    favoriteBtn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        favoriteBtn.click();
+      }
+    });
+  </script>
+
+</body>
+</html>

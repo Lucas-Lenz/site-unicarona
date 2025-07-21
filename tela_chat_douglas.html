@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #fff;
+    }
+
+    header {
+      background-color: #234674;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      border-bottom-left-radius: 30px;
+      border-bottom-right-radius: 30px;
+      position: relative;
+    }
+
+    /* Botão voltar fixo à esquerda no topo */
+    .back-button {
+      position: absolute;
+      left: 20px;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .back-button:hover {
+      text-decoration: underline;
+    }
+    .logo {
+      font-style: italic;
+      font-size: 24px;
+    }
+
+    .chat-container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .chat-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px; /* adiciona um pequeno espaço entre nome e foto */
+        margin-bottom: 20px;
+        }
+
+    .chat-header h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .foto {
+      border: 2px solid black;
+      border-radius: 50%;
+      padding: 0.3px 0.3px;
+      font-size: 140px;
+      width: 100px;
+      height: 100px;
+    }
+
+    .mensagem {
+      max-width: 70%;
+      padding: 10px;
+      border: 1px solid black;
+      border-radius: 12px;
+      margin: 10px 0;
+      font-weight: bold;
+    }
+
+    .esquerda {
+      text-align: left;
+    }
+
+    .direita {
+      text-align: right;
+    }
+
+    .mensagem.esquerda {
+      margin-right: auto;
+    }
+
+    .mensagem.direita {
+      margin-left: auto;
+      background-color: #f4f4f4;
+    }
+
+    .input-area {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 30px;
+      border: 2px solid black;
+      border-radius: 20px;
+      padding: 5px 10px;
+    }
+
+    .input-area input {
+      border: none;
+      flex: 1;
+      padding: 8px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .input-area button {
+      background-color: white;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="tela_usuario_motorista.html" class="back-button" id="voltarBtn">Voltar</a>
+    <div class="logo">unicarona</div>
+  </header>
+
+  <div class="chat-container">
+    <div class="chat-header">
+      <h2>Douglas</h2>
+      <img src = "https://randomuser.me/api/portraits/men/56.jpg" class="foto" />
+    </div>
+
+    <div class="mensagem direita">Eai Douglas! Passa no metro??</div>
+    <div class="mensagem direita">to precisando aí de umas caronas se tiver livre...</div>
+    <div class="mensagem esquerda">Saudações</div>
+    <div class="mensagem esquerda">Passo sim, certamente.</div>
+    <div class="mensagem direita">Valeu!</div>
+    <div class="mensagem direita">To aqui te esperando em frente a biblioteca</div>
+
+    <div class="input-area">
+      <input type="text" placeholder="Enviar mensagem">
+      <button>➤</button>
+    </div>
+  </div>
+
+</body>
+</html>

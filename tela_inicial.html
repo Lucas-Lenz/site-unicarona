@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Unicarona - Login/Cadastro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+    }
+
+    .header {
+      background-color: #1e3d6b;
+      width: 100%;
+      height: 180px;
+      border-bottom-left-radius: 60px;
+      border-bottom-right-radius: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header h1 {
+      color: white;
+      font-size: 28px;
+      text-transform: lowercase;
+      font-weight: 600;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 350px;
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .toggle-buttons {
+      display: flex;
+      width: 100%;
+      border: 2px solid #1e3d6b;
+      border-radius: 40px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .toggle-buttons button {
+      flex: 1;
+      padding: 10px 0;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 16px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .toggle-buttons .active {
+      background-color: #1e3d6b;
+      color: white;
+    }
+
+    .toggle-buttons .inactive {
+      background-color: white;
+      color: #1e3d6b;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-bottom: 8px;
+      display: none;
+      text-align: left;
+    }
+
+    .input-group {
+      width: 100%;
+      margin-bottom: 15px;
+      position: relative;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px 40px 12px 40px; /* espaço para ícone */
+      border: 2px solid #1e3d6b;
+      border-radius: 30px;
+      font-size: 16px;
+      color: #333;
+      background-color: #f1f1f1;
+      outline: none;
+      transition: border 0.3s;
+    }
+
+    .input-group input.error {
+      border-color: red;
+    }
+
+    /* Ícones dentro dos inputs */
+    .input-group .icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #1e3d6b;
+      font-size: 18px;
+      pointer-events: none;
+    }
+
+    /* Botão de login/cadastro */
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 30px;
+      background-color: #ccc;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      box-shadow: 2px 4px 6px rgba(0,0,0,0.1);
+      margin-bottom: 10px;
+      transition: background-color 0.3s;
+      cursor: pointer;
+    }
+
+    .login-btn.active {
+      background-color: #1e3d6b;
+    }
+
+    .forgot {
+      display: block;
+      text-align: center;
+      color: blue;
+      font-size: 14px;
+      text-decoration: none;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>unicarona</h1>
+  </div>
+
+  <div class="container">
+
+    <!-- Alternador Entrar/Cadastrar -->
+    <div class="toggle-buttons">
+      <button id="btnEntrar" class="active">Entrar</button>
+      <button id="btnCadastrar" class="inactive">Cadastrar</button>
+    </div>
+
+    <!-- Formulário Entrar -->
+    <form id="formEntrar" autocomplete="off" style="width: 100%;">
+      <div id="errorMsgEntrar" class="error-message">
+        <span style="color: red;">⚠️</span> Responda todos os campos
+      </div>
+      <div class="input-group">
+        <span class="icon">📧</span>
+        <input type="email" id="emailEntrar" placeholder="Email" required />
+      </div>
+      <div class="input-group">
+        <span class="icon">🔒</span>
+        <input type="password" id="senhaEntrar" placeholder="Senha" required />
+      </div>
+      <button type="submit" id="loginBtnEntrar" class="login-btn">Entrar</button>
+      <a href="#" class="forgot">esqueci a senha</a>
+    </form>
+
+    <!-- Formulário Cadastrar -->
+    <form id="formCadastrar" autocomplete="off" style="width: 100%; display:none;">
+      <div id="errorMsgCadastrar" class="error-message">
+        <span style="color: red;">⚠️</span> Responda todos os campos primeiro
+      </div>
+      <div class="input-group">
+        <span class="icon">📧</span>
+        <input type="email" id="emailCadastrar" placeholder="Email" required />
+      </div>
+      <div class="input-group">
+        <span class="icon">🔒</span>
+        <input type="password" id="senhaCadastrar" placeholder="Senha" required />
+      </div>
+      <div class="input-group">
+        <span class="icon">🔒</span>
+        <input type="password" id="confirmarSenhaCadastrar" placeholder="Confirmar senha" required />
+      </div>
+      <div class="input-group">
+        <span class="icon">🗒️</span>
+        <input type="text" id="cpfCadastrar" placeholder="CPF" maxlength="14" required />
+      </div>
+      <button type="submit" id="loginBtnCadastrar" class="login-btn">Cadastrar</button>
+    </form>
+
+  </div>
+
+  <script>
+    // Elementos dos botões toggle
+    const btnEntrar = document.getElementById("btnEntrar");
+    const btnCadastrar = document.getElementById("btnCadastrar");
+
+    // Forms e botões
+    const formEntrar = document.getElementById("formEntrar");
+    const formCadastrar = document.getElementById("formCadastrar");
+
+    // Desativa validação nativa para usar validação customizada
+    formEntrar.noValidate = true;
+    formCadastrar.noValidate = true;
+
+    const loginBtnEntrar = document.getElementById("loginBtnEntrar");
+    const loginBtnCadastrar = document.getElementById("loginBtnCadastrar");
+
+    const errorMsgEntrar = document.getElementById("errorMsgEntrar");
+    const errorMsgCadastrar = document.getElementById("errorMsgCadastrar");
+
+    // Inputs Entrar
+    const emailEntrar = document.getElementById("emailEntrar");
+    const senhaEntrar = document.getElementById("senhaEntrar");
+
+    // Inputs Cadastrar
+    const emailCadastrar = document.getElementById("emailCadastrar");
+    const senhaCadastrar = document.getElementById("senhaCadastrar");
+    const confirmarSenhaCadastrar = document.getElementById("confirmarSenhaCadastrar");
+    const cpfCadastrar = document.getElementById("cpfCadastrar");
+
+    // Função para ativar/desativar botão e remover erros do form Entrar
+    function atualizarBotaoEntrar() {
+      const email = emailEntrar.value.trim();
+      const senha = senhaEntrar.value.trim();
+
+      if (email && senha) {
+        loginBtnEntrar.classList.add("active");
+      } else {
+        loginBtnEntrar.classList.remove("active");
+      }
+
+      emailEntrar.classList.remove("error");
+      senhaEntrar.classList.remove("error");
+      errorMsgEntrar.style.display = "none";
+    }
+
+    // Função para ativar/desativar botão e remover erros do form Cadastrar
+    function atualizarBotaoCadastrar() {
+      const email = emailCadastrar.value.trim();
+      const senha = senhaCadastrar.value.trim();
+      const confirmar = confirmarSenhaCadastrar.value.trim();
+      const cpf = cpfCadastrar.value.trim();
+
+      if (email && senha && confirmar && cpf) {
+        loginBtnCadastrar.classList.add("active");
+      } else {
+        loginBtnCadastrar.classList.remove("active");
+      }
+
+      emailCadastrar.classList.remove("error");
+      senhaCadastrar.classList.remove("error");
+      confirmarSenhaCadastrar.classList.remove("error");
+      cpfCadastrar.classList.remove("error");
+      errorMsgCadastrar.style.display = "none";
+    }
+
+    // Alternar para Entrar
+    btnEntrar.addEventListener("click", () => {
+      btnEntrar.classList.add("active");
+      btnEntrar.classList.remove("inactive");
+      btnCadastrar.classList.remove("active");
+      btnCadastrar.classList.add("inactive");
+
+      formEntrar.style.display = "block";
+      formCadastrar.style.display = "none";
+      errorMsgEntrar.style.display = "none";
+      errorMsgCadastrar.style.display = "none";
+
+      // Limpar erros e campos do formCadastrar
+      emailCadastrar.classList.remove("error");
+      senhaCadastrar.classList.remove("error");
+      confirmarSenhaCadastrar.classList.remove("error");
+      cpfCadastrar.classList.remove("error");
+
+      emailCadastrar.value = "";
+      senhaCadastrar.value = "";
+      confirmarSenhaCadastrar.value = "";
+      cpfCadastrar.value = "";
+
+      atualizarBotaoEntrar();
+    });
+
+    // Alternar para Cadastrar
+    btnCadastrar.addEventListener("click", () => {
+      btnCadastrar.classList.add("active");
+      btnCadastrar.classList.remove("inactive");
+      btnEntrar.classList.remove("active");
+      btnEntrar.classList.add("inactive");
+
+      formCadastrar.style.display = "block";
+      formEntrar.style.display = "none";
+      errorMsgEntrar.style.display = "none";
+      errorMsgCadastrar.style.display = "none";
+
+      // Limpar erros e campos do formEntrar
+      emailEntrar.classList.remove("error");
+      senhaEntrar.classList.remove("error");
+      emailEntrar.value = "";
+      senhaEntrar.value = "";
+
+      atualizarBotaoCadastrar();
+    });
+
+    // Eventos de input para Entrar
+    emailEntrar.addEventListener("input", atualizarBotaoEntrar);
+    senhaEntrar.addEventListener("input", atualizarBotaoEntrar);
+
+    // Eventos de input para Cadastrar
+    emailCadastrar.addEventListener("input", atualizarBotaoCadastrar);
+    senhaCadastrar.addEventListener("input", atualizarBotaoCadastrar);
+    confirmarSenhaCadastrar.addEventListener("input", atualizarBotaoCadastrar);
+    cpfCadastrar.addEventListener("input", atualizarBotaoCadastrar);
+
+    // Validação e envio do formulário Entrar
+    formEntrar.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = emailEntrar.value.trim();
+      const senha = senhaEntrar.value.trim();
+
+      let valid = true;
+
+      // limpar erros antigos
+      emailEntrar.classList.remove("error");
+      senhaEntrar.classList.remove("error");
+      errorMsgEntrar.style.display = "none";
+
+      if (!email) {
+        emailEntrar.classList.add("error");
+        valid = false;
+      }
+      if (!senha) {
+        senhaEntrar.classList.add("error");
+        valid = false;
+      }
+
+      if (!valid) {
+        errorMsgEntrar.textContent = "⚠️ Responda todos os campos";
+        errorMsgEntrar.style.display = "block";
+      } else {
+        // Se email for "passageiro", redireciona para tela_home_passageiro.html
+        if (email === "passageiro") {
+          window.location.href = "tela_home_passageiro.html";
+        } 
+        else if (email === "motorista") {
+          window.location.href = "tela_home_motorista.html";
+        } 
+        else {
+          // Senão, redireciona para tela_bem-vindo.html
+          window.location.href = "tela_home_passageiro.html";
+        }
+      }
+    });
+
+    // Validação e envio do formulário Cadastrar
+    formCadastrar.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = emailCadastrar.value.trim();
+      const senha = senhaCadastrar.value.trim();
+      const confirmar = confirmarSenhaCadastrar.value.trim();
+      const cpf = cpfCadastrar.value.trim();
+
+      let valid = true;
+
+      // limpar erros antigos
+      emailCadastrar.classList.remove("error");
+      senhaCadastrar.classList.remove("error");
+      confirmarSenhaCadastrar.classList.remove("error");
+      cpfCadastrar.classList.remove("error");
+      errorMsgCadastrar.style.display = "none";
+
+      if (!email) {
+        emailCadastrar.classList.add("error");
+        valid = false;
+      }
+      if (!senha) {
+        senhaCadastrar.classList.add("error");
+        valid = false;
+      }
+      if (!confirmar) {
+        confirmarSenhaCadastrar.classList.add("error");
+        valid = false;
+      }
+      if (!cpf) {
+        cpfCadastrar.classList.add("error");
+        valid = false;
+      }
+
+      if (senha && confirmar && senha !== confirmar) {
+        if (!valid) {
+          // Se tem campos vazios + senha errada
+          errorMsgCadastrar.textContent = "⚠️ Responda todos os campos primeiro";
+        } else {
+          // Só senha errada
+          errorMsgCadastrar.textContent = "⚠️ Senhas não conferem";
+          confirmarSenhaCadastrar.classList.add("error");
+        }
+        errorMsgCadastrar.style.display = "block";
+        return;
+      }
+
+      if (!valid) {
+        errorMsgCadastrar.textContent = "⚠️ Responda todos os campos primeiro";
+        errorMsgCadastrar.style.display = "block";
+      } else {
+        errorMsgCadastrar.style.display = "none";
+        // Apenas redireciona, não troca formulário
+        window.location.href = "tela_bem-vindo.html";
+      }
+    });
+
+    document.getElementsByClassName("forgot")[0].addEventListener('click', () => { //getElementsByClassName retorna uma coleção (HTMLCollection), não um único elemento. Ou seja, você precisa acessar o índice [0] (ou fazer um loop se houver mais de um).
+  window.location.href = 'tela_esqueci_senha01.html';
+});
+
+  </script>
+
+</body>
+</html>

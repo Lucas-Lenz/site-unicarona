@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Notificações</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #fff;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .header {
+      background-color: #1e3d6b;
+      width: 100%;
+      height: 70px;
+      border-bottom-left-radius: 50px;
+      border-bottom-right-radius: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 0 20px;
+      box-sizing: border-box;
+      color: white;
+      font-weight: 700;
+      font-size: 24px;
+      font-family: 'Poppins', sans-serif;
+      z-index: 1000;
+    }
+
+    .header .back-button {
+      position: absolute;
+      left: 20px;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .header .back-button:hover {
+      text-decoration: underline;
+    }
+
+ 
+
+    .spacer-top {
+      height: 70px;
+      width: 100%;
+    }
+
+    h1 {
+      font-weight: 700;
+      margin: 20px 0;
+      font-size: 1.5rem;
+    }
+
+    .notificacao {
+      border: 1.5px solid #000;
+      border-radius: 12px;
+      padding: 15px 20px;
+      margin-bottom: 15px;
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    .notificacao .icone {
+      font-size: 1.5rem;
+      margin-right: 10px;
+    }
+
+    .notificacao .texto {
+      flex: 1;
+    }
+
+    .notificacao .titulo {
+      font-weight: 700;
+    }
+
+    .notificacao .descricao {
+      font-size: 0.85rem;
+      margin-top: 4px;
+    }
+
+    .notificacao .botao {
+      background-color: #274b82;
+      border: none;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .notificacao .botao.inativo {
+      background-color: #274b82;
+      cursor: default;
+    }
+
+    .bolinha {
+      width: 12px;
+      height: 12px;
+      background-color: rgb(255, 94, 0);
+      border-radius: 50%;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="tela_home_passageiro.html" class="back-button" id="voltarBtn">Voltar</a>
+    unicarona
+  </header>
+
+  <div class="spacer-top"></div>
+
+  <h1>Notificações</h1>
+
+  <div class="notificacao">
+    <div class="icone">
+   <div class="icone">
+  <img src="message-text-svgrepo-com.svg" alt="Ícone de mensagem" style="width: 30px; height: 30px;">
+</div>
+    
+  </div>
+    <div class="texto">
+      <div class="titulo">Alerta de comunicado</div>
+      <div>Douglas Costa Ferreira mandou um comunicado para você.</div>
+    </div>
+    <button class="botao" onclick="window.location.href='tela_alerta_comunicado.html'">Abrir</button>
+    <div class="bolinha"></div>
+  </div>
+
+  <div class="notificacao">
+    <div class="icone">
+  <img src="car-1-svgrepo-com.svg" alt="Ícone de carro" style="width: 30px; height: 30px;">
+</div>
+    <div class="texto">
+      <div class="titulo">Pedido de carona aceito</div>
+      <div class="descricao">Roberto Campos Neto aceitou seu pedido para a carona de 13:20 do dia 22/07 para a Unirio CCHS.</div>
+    </div>
+    <button class="botao inativo">Abrir</button>
+  </div>
+
+
+  <div class="notificacao">
+    <div class="icone">⭐</div>
+    <div class="texto">
+      <div class="titulo">Avaliação 4 estrelas</div>
+      <div class="descricao">Seu perfil recebeu uma avaliação de 4 estrelas.</div>
+    </div>
+    <button class="botao inativo">Abrir</button>
+  </div>
+
+</body>
+</html>

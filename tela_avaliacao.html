@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Avaliação da Corrida</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 15px;
+    }
+    .estrelas {
+      font-size: 40px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .estrela {
+      color: black;
+    }
+    .estrela.selecionada {
+      color: gold;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #1c3c6d;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 16px;
+      box-shadow: 1px 2px 5px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Avalie até 5 estrelas</h2>
+
+  <div class="estrelas" id="estrelas-container">
+    <span class="estrela" data-valor="1">☆</span>
+    <span class="estrela" data-valor="2">☆</span>
+    <span class="estrela" data-valor="3">☆</span>
+    <span class="estrela" data-valor="4">☆</span>
+    <span class="estrela" data-valor="5">☆</span>
+  </div>
+
+  <button id="btnConcluir">Concluir</button>
+
+  <script>
+    const estrelas = document.querySelectorAll('.estrela');
+    let notaSelecionada = 0;
+
+    // Função para atualizar visual das estrelas
+    function atualizarEstrelas(valor) {
+      estrelas.forEach(star => {
+        star.textContent = '☆'; // vazia
+        star.classList.remove('selecionada');
+      });
+      for (let i = 0; i < valor; i++) {
+        estrelas[i].textContent = '★'; // cheia
+        estrelas[i].classList.add('selecionada');
+      }
+      notaSelecionada = valor;
+    }
+
+    // Inicializa com nota da query string (se existir)
+    const urlParams = new URLSearchParams(window.location.search);
+    const notaInicial = parseInt(urlParams.get('nota')) || 0;
+    if (notaInicial > 0) {
+      atualizarEstrelas(notaInicial);
+    }
+
+    // Evento click nas estrelas
+    estrelas.forEach(star => {
+      star.addEventListener('click', () => {
+        const valor = parseInt(star.getAttribute('data-valor'));
+        if (notaSelecionada === valor) {
+          // Se clicar na mesma estrela, desmarcar tudo (0)
+          atualizarEstrelas(0);
+        } else {
+          atualizarEstrelas(valor);
+        }
+      });
+    });
+
+    document.getElementById('btnConcluir').addEventListener('click', () => {
+      alert('Avaliação concluída!');
+      // Redireciona para tela_abrir passando a nota via query string
+      window.location.href = `tela_abrir.html?nota=${notaSelecionada}`;
+    });
+  </script>
+
+</body>
+</html>

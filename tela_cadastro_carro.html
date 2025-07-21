@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Unicarona - Cadastro do Carro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: white;
+      display: flex; flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .header {
+      background-color: #1e3d6b;
+      width: 100%;
+      height: 80px;
+      border-bottom-left-radius: 40px;
+      border-bottom-right-radius: 40px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      color: white;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .back-button {
+      position: absolute;
+      left: 20px;
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    .form-container {
+      width: 100%;
+      max-width: 360px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .car-photo {
+      width: 100px;
+      height: 100px;
+      border-radius: 16px;
+      border: 2px dashed #1e3d6b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #666;
+      text-align: center;
+      padding: 8px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    #fotoCarroInput {
+      display: none;
+    }
+
+    .input-group {
+      width: 100%;
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: #1e3d6b;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border-radius: 30px;
+      border: 2px solid #1e3d6b;
+      font-size: 14px;
+      background-color: #f1f1f1;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    input.error {
+      border-color: red !important;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-bottom: 12px;
+      display: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .success-message {
+      display: none;
+      width: 100%;
+      text-align: center;
+      background-color: #d4edda;
+      color: #155724;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+
+    .submit-btn {
+      margin-top: 20px;
+      width: 60%;
+      padding: 12px;
+      background-color: #1e3d6b;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 2px 4px 6px rgba(0,0,0,0.1);
+      transition: background-color 0.3s;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <a href="cadastro_motorista.html" class="back-button">Voltar</a>
+    <h1>unicarona</h1>
+  </div>
+
+  <div id="sucessoMsg" class="success-message">
+    ✅ Cadastro concluído com sucesso!
+  </div>
+
+  <form id="formCadastroCarro" class="form-container" novalidate>
+    <label style="align-self: flex-start; margin-bottom: 5px;">Seu carro</label>
+
+    <label for="fotoCarroInput" class="car-photo">Inserir<br>Foto</label>
+    <input type="file" id="fotoCarroInput" accept="image/*" />
+
+    <div class="input-group">
+      <label for="marcaInput">Marca</label>
+      <input type="text" id="marcaInput" placeholder="Ex: Fiat, Ford, etc." />
+    </div>
+
+    <div class="input-group">
+      <label for="placaInput">Placa</label>
+      <input type="text" id="placaInput" placeholder="Ex: ABC1D23" />
+    </div>
+
+    <div class="input-group">
+      <label for="corInput">Cor</label>
+      <input type="text" id="corInput" placeholder="Cor do carro" />
+    </div>
+
+    <div class="input-group">
+      <label for="renavamInput">Número RENAVAM</label>
+      <input type="text" id="renavamInput" placeholder="Ex: 12345678901" />
+    </div>
+
+    <div class="input-group">
+      <label for="crlvInput">Número do CRLV</label>
+      <input type="text" id="crlvInput" placeholder="Ex: 0000000000" />
+    </div>
+
+    <div class="input-group">
+      <label for="portasInput">Quantidade de portas</label>
+      <input type="text" id="portasInput" placeholder="Ex: 2 ou 4" />
+    </div>
+
+    <div class="error-message" id="errorMsg">⚠️ Por favor, preencha todos os campos obrigatórios.</div>
+
+    <button type="submit" class="submit-btn">Finalizar</button>
+  </form>
+
+  <script>
+    const form = document.getElementById("formCadastroCarro");
+    const errorMsg = document.getElementById("errorMsg");
+    const sucessoMsg = document.getElementById("sucessoMsg");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      errorMsg.style.display = "none";
+      sucessoMsg.style.display = "none";
+
+      const campos = [
+        document.getElementById("marcaInput"),
+        document.getElementById("placaInput"),
+        document.getElementById("corInput"),
+        document.getElementById("renavamInput"),
+        document.getElementById("crlvInput"),
+        document.getElementById("portasInput")
+      ];
+
+      let formValido = true;
+
+      campos.forEach(campo => {
+        if (!campo.value.trim()) {
+          campo.classList.add("error");
+          formValido = false;
+        } else {
+          campo.classList.remove("error");
+        }
+      });
+
+      if (!formValido) {
+        errorMsg.style.display = "block";
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
+      // Exibe mensagem de sucesso
+      sucessoMsg.style.display = "block";
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      setTimeout(() => {
+        // Redireciona para tela inicial (ou outra desejada)
+        window.location.href = "tela_home_motorista.html";
+      }, 2000);
+    });
+  </script>
+
+</body>
+</html>

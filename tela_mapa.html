@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Unicarona - Mapa</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .header {
+      background-color: #1e3d6b;
+      color: white;
+      width: 100%;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 600;
+      border-bottom-left-radius: 30px;
+      border-bottom-right-radius: 30px;
+      position: relative;
+    }
+
+    .back-button {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .back-button:hover {
+      text-decoration: underline;
+    }
+
+    #map {
+      width: 90%;
+      height: 500px;
+      margin-top: 20px;
+      border-radius: 20px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 20px;
+      margin: 20px;
+    }
+
+    .buttons button {
+      padding: 12px 20px;
+      border-radius: 25px;
+      border: none;
+      background-color: #1e3d6b;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .buttons button:hover {
+      background-color: #274b82;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <a href="#" class="back-button" id="voltarBtn">Voltar</a>
+    unicarona
+  </div>
+
+  <div id="map"></div>
+
+  <div class="buttons">
+    <button onclick="togglePontos()">Ver pontos perigosos</button>
+    <button onclick="mostrarFormularioRota()">Ver rotas</button>
+  </div>
+
+  <div id="form-rota" style="display: none; flex-direction: column; gap: 10px; margin-bottom: 20px; width: 90%;">
+    <input id="input-destino" type="text" placeholder="Digite o destino" style="padding: 10px; border-radius: 25px; border: 1px solid #ccc;" />
+    <input id="input-origem" type="text" placeholder="Digite a origem" style="padding: 10px; border-radius: 25px; border: 1px solid #ccc;" value="Unirio, Rio de Janeiro" />
+    <button id="botao-rota" onclick="tracarOuOcultarRota()" style="padding: 12px; border-radius: 25px; background-color: #007bff; color: white; border: none; font-weight: bold; cursor: pointer; transition: background-color 0.3s;">Traçar rota</button>
+  </div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.min.js"></script>
+  <script>
+    const map = L.map('map').setView([-22.95489986714815, -43.16880825580855], 15);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    L.marker([-22.95489986714815, -43.16880825580855])
+      .addTo(map)
+      .bindPopup('Unirio - Campus Urca')
+      .openPopup();
+
+    const alertaIcon = L.icon({
+      iconUrl: 'https://cdn-icons-png.flaticon.com/512/1828/1828843.png',
+      iconSize: [30, 30],
+      iconAnchor: [15, 30],
+      popupAnchor: [0, -30]
+    });
+
+    const pontosPerigosos = [
+      { nome: 'Passarela - Policlínica de Botafogo', coords: [-22.95157693308805, -43.17466961793403] },
+      { nome: 'Clube do Flamengo', coords: [-22.951774, -43.174007] },
+      { nome: 'Morro da Babilônia', coords: [-22.960320, -43.169420] },
+      { nome: 'Morro da Urca (entrada)', coords: [-22.951250, -43.166760] }
+    ];
+
+    let pontosVisiveis = false;
+    const marcadores = [];
+    const botaoPontos = document.querySelector('.buttons button:first-child');
+
+    const mensagemAviso = document.createElement("div");
+    mensagemAviso.textContent = "⚠️ Atenção! Os pontos perigosos podem incluir recentes tiroteios, assaltos, acidentes e/ou enchentes.";
+    mensagemAviso.style.color = "red";
+    mensagemAviso.style.fontWeight = "bold";
+    mensagemAviso.style.marginTop = "10px";
+    mensagemAviso.style.display = "none";
+    document.querySelector('.buttons').parentNode.insertBefore(mensagemAviso, document.querySelector('.buttons').nextSibling);
+
+    function togglePontos() {
+      if (!pontosVisiveis) {
+        pontosPerigosos.forEach(ponto => {
+          const marker = L.marker(ponto.coords, { icon: alertaIcon })
+            .addTo(map)
+            .bindPopup(`⚠️ Ponto perigoso: ${ponto.nome}`);
+          marcadores.push(marker);
+        });
+        botaoPontos.textContent = "Ocultar pontos perigosos";
+        mensagemAviso.style.display = "block";
+      } else {
+        marcadores.forEach(marker => map.removeLayer(marker));
+        marcadores.length = 0;
+        botaoPontos.textContent = "Ver pontos perigosos";
+        mensagemAviso.style.display = "none";
+      }
+      pontosVisiveis = !pontosVisiveis;
+    }
+
+    // Funções de rota
+    let rotaControl = null;
+    let marcadorOrigem = null;
+    let marcadorDestino = null;
+
+    // Ícone bola azul para origem
+    const bolaAzulIcon = L.divIcon({
+      className: '',
+      html: '<div style="width:16px; height:16px; background:#3399ff; border-radius:50%; border:2px solid #1a75ff;"></div>',
+      iconSize: [16, 16],
+      iconAnchor: [8, 8],
+      popupAnchor: [0, -8]
+    });
+
+    // Ícone quadrado vermelho para destino
+    const quadradoVermelhoIcon = L.divIcon({
+      className: '',
+      html: '<div style="width:16px; height:16px; background:#fd7e14; border:2px solid #a52727;"></div>',
+      iconSize: [16, 16],
+      iconAnchor: [8, 8],
+      popupAnchor: [0, -8]
+    });
+
+    function mostrarFormularioRota() {
+      const form = document.getElementById('form-rota');
+      form.style.display = form.style.display === 'none' ? 'flex' : 'none';
+    }
+
+    async function buscarCoordenadas(endereco) {
+      const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(endereco)}`);
+      const data = await response.json();
+      if (data && data.length > 0) {
+        return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+      } else {
+        throw new Error(`Endereço não encontrado: ${endereco}`);
+      }
+    }
+
+    async function tracarOuOcultarRota() {
+      const botao = document.getElementById('botao-rota');
+
+      if (rotaControl) {
+        // Remove rota e marcadores
+        map.removeControl(rotaControl);
+        rotaControl = null;
+
+        if (marcadorOrigem) {
+          map.removeLayer(marcadorOrigem);
+          marcadorOrigem = null;
+        }
+        if (marcadorDestino) {
+          map.removeLayer(marcadorDestino);
+          marcadorDestino = null;
+        }
+
+        botao.textContent = "Traçar rota";
+        return;
+      }
+
+      const origem = document.getElementById('input-origem').value;
+      const destino = document.getElementById('input-destino').value;
+
+      if (!origem || !destino) {
+        alert("Por favor, preencha origem e destino.");
+        return;
+      }
+
+      try {
+        const coordOrigem = await buscarCoordenadas(origem);
+        const coordDestino = await buscarCoordenadas(destino);
+
+        // Adiciona marcadores: bola azul para origem, quadrado vermelho para destino
+        marcadorOrigem = L.marker(coordOrigem, { icon: bolaAzulIcon }).addTo(map).bindPopup("Origem");
+        marcadorDestino = L.marker(coordDestino, { icon: quadradoVermelhoIcon }).addTo(map).bindPopup("Destino");
+
+        rotaControl = L.Routing.control({
+          waypoints: [
+            L.latLng(coordOrigem[0], coordOrigem[1]),
+            L.latLng(coordDestino[0], coordDestino[1])
+          ],
+          routeWhileDragging: false,
+          show: false,
+          addWaypoints: false,
+          draggableWaypoints: false,
+          lineOptions: {
+            styles: [{ color: '#66b3ff', weight: 6 }]
+          },
+          createMarker: function () { return null; }
+        }).addTo(map);
+
+        map.setView(coordOrigem, 14);
+        botao.textContent = "Ocultar rota";
+      } catch (error) {
+        alert("Erro ao traçar rota: " + error.message);
+      }
+    }
+    
+    // Script para ajustar o botão Voltar com base na origem
+    const params = new URLSearchParams(window.location.search);
+    const origem = params.get("origem");
+
+    const voltarBtn = document.getElementById("voltarBtn");
+
+    if (origem === "tela_home_motorista") {
+      voltarBtn.href = "tela_home_motorista.html";
+    } else {
+      voltarBtn.href = "tela_home_passageiro.html";
+    }
+
+  </script>
+
+</body>
+</html>

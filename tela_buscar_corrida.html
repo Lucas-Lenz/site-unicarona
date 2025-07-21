@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Buscar Corrida</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      background-color: #1e3d6b;
+      height: 100px;
+      width: 100%;
+      border-bottom-left-radius: 60px;
+      border-bottom-right-radius: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      color: white;
+      font-size: 28px;
+      font-weight: 600;
+      text-transform: lowercase;
+    }
+
+    .voltar {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 17px;
+      color: white;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .voltar:hover {
+      text-decoration: underline;
+    }
+
+    .form-container {
+      width: 90%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .form-container input {
+      padding: 12px 16px;
+      border-radius: 25px;
+      border: 1.5px solid #ccc;
+      font-size: 14px;
+      width: 100%;
+    }
+
+    .form-container button {
+      padding: 12px 16px;
+      border-radius: 25px;
+      background-color: #1e3d6b;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .form-container button:hover {
+      background-color: #16305a;
+    }
+
+    #map {
+      width: 90%;
+      height: 400px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .motoristas-container {
+      width: 90%;
+      max-width: 400px;
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .card-motorista {
+      border: 1.5px solid #000;
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-motorista p {
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .botao-corrida {
+      padding: 8px 16px;
+      border-radius: 20px;
+      background-color: #1e3d6b;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 2px 3px 6px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="tela_home_passageiro.html" class="voltar">Voltar</a>
+    unicarona
+  </header>
+
+  <div class="form-container">
+    <input id="input-origem" type="text" placeholder="Digite a origem" />
+    <input id="input-destino" type="text" placeholder="Digite o destino" />
+    <button onclick="tracarOuOcultarRota()">Buscar Corrida</button>
+  </div>
+
+  <div id="map"></div>
+  
+  <div class="motoristas-container" id="motoristasContainer">
+    <div class="card-motorista">
+      <div>
+        <p>Douglas Eduardo</p>
+        <p>R$ 5,90</p>
+      </div>
+      <button class="botao-corrida" onclick="pedirCorrida('Douglas Eduardo')">Pedir corrida</button>
+    </div>
+    <div class="card-motorista">
+      <div>
+        <p>Motorista</p>
+        <p>R$ 6,70</p>
+      </div>
+      <button class="botao-corrida" onclick="pedirCorrida('Motorista')">Pedir corrida</button>
+    </div>
+    <div class="card-motorista">
+      <div>
+        <p>Motorista</p>
+        <p>R$ 4,90</p>
+      </div>
+      <button class="botao-corrida" onclick="pedirCorrida('Motorista')">Pedir corrida</button>
+    </div>
+    <div class="card-motorista">
+      <div>
+        <p>Motorista</p>
+        <p>R$ 5,90</p>
+      </div>
+      <button class="botao-corrida" onclick="pedirCorrida('Motorista')">Pedir corrida</button>
+    </div>
+  </div>
+<!-- Tela de Aguardando Aceitação -->
+<div id="telaAguardando" style="display: none; flex-direction: column; align-items: center; margin: 40px 0;">
+  <div style="border: 1.5px solid black; border-radius: 12px; padding: 16px 24px; font-weight: 600; text-align: center;">
+    Aguardando Douglas aceitar ou recusar corrida
+  </div>
+  <p style="margin-top: 24px; font-weight: 600;">Aguarde alguns segundos</p>
+</div>
+
+<!-- Tela de Aceitação -->
+<div id="telaAceita" style="display: none; flex-direction: column; align-items: center; margin: 40px 0;">
+  <div style="background-color: #c8f7c5; border-radius: 12px; padding: 16px 24px; font-weight: 600; text-align: center; border: 2px solid #4CAF50;">
+    Douglas aceitou seu pedido!
+  </div>
+  <button onclick="irParaTelaCorrida()" style="margin-top: 20px; padding: 10px 20px; border-radius: 20px; background-color: #1e3d6b; color: white; font-weight: bold; border: none; cursor: pointer;">
+    Ir pra tela de corrida
+  </button>
+</div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.min.js"></script>
+  <script>
+    const inputOrigem = document.getElementById('input-origem');
+    const inputDestino = document.getElementById('input-destino');
+    const containerMotoristas = document.getElementById('motoristasContainer');
+
+    const map = L.map('map').setView([-22.9549, -43.1688], 15);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    let rotaControl = null;
+    let marcadorOrigem = null;
+    let marcadorDestino = null;
+
+    const iconeOrigem = L.divIcon({
+      className: '',
+      html: '<div style="width:16px; height:16px; background:#3399ff; border-radius:50%; border:2px solid #1a75ff;"></div>',
+      iconSize: [16, 16],
+      iconAnchor: [8, 8]
+    });
+
+    const iconeDestino = L.divIcon({
+      className: '',
+      html: '<div style="width:16px; height:16px; background:#fd7e14; border:2px solid #a52727;"></div>',
+      iconSize: [16, 16],
+      iconAnchor: [8, 8]
+    });
+
+    async function buscarCoordenadas(endereco) {
+      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(endereco)}`);
+      const dados = await res.json();
+      if (dados.length === 0) throw new Error("Endereço não encontrado.");
+      return [parseFloat(dados[0].lat), parseFloat(dados[0].lon)];
+    }
+
+    inputOrigem.addEventListener('input', tentarTraçarAutomaticamente);
+    inputDestino.addEventListener('input', tentarTraçarAutomaticamente);
+
+    function tentarTraçarAutomaticamente() {
+      if (inputOrigem.value && inputDestino.value) {
+        tracarOuOcultarRota(true); // chamado automaticamente
+      }
+    }
+
+    async function tracarOuOcultarRota(chamadoAutomaticamente = false) {
+      const origem = inputOrigem.value;
+      const destino = inputDestino.value;
+
+      if (!origem || !destino) {
+        if (!chamadoAutomaticamente) alert("Preencha origem e destino.");
+        return;
+      }
+
+      if (rotaControl) {
+        map.removeControl(rotaControl);
+        rotaControl = null;
+        if (marcadorOrigem) map.removeLayer(marcadorOrigem);
+        if (marcadorDestino) map.removeLayer(marcadorDestino);
+        marcadorOrigem = null;
+        marcadorDestino = null;
+      }
+
+      try {
+        const coordOrigem = await buscarCoordenadas(origem);
+        const coordDestino = await buscarCoordenadas(destino);
+
+        marcadorOrigem = L.marker(coordOrigem, { icon: iconeOrigem }).addTo(map).bindPopup("Origem");
+        marcadorDestino = L.marker(coordDestino, { icon: iconeDestino }).addTo(map).bindPopup("Destino");
+
+        rotaControl = L.Routing.control({
+          waypoints: [L.latLng(...coordOrigem), L.latLng(...coordDestino)],
+          routeWhileDragging: false,
+          addWaypoints: false,
+          draggableWaypoints: false,
+          createMarker: () => null,
+          lineOptions: { styles: [{ color: '#66b3ff', weight: 6 }] }
+        }).addTo(map);
+
+        map.setView(coordOrigem, 14);
+
+        if (!chamadoAutomaticamente) {
+          containerMotoristas.style.display = 'flex';
+        }
+      } catch (err) {
+        alert("Erro: " + err.message);
+      }
+    }
+
+    function pedirCorrida(nomeMotorista) {
+  if (nomeMotorista === "Douglas Eduardo") {
+    containerMotoristas.style.display = 'none';
+    document.getElementById('telaAguardando').style.display = 'flex';
+
+    setTimeout(() => {
+      document.getElementById('telaAguardando').style.display = 'none';
+      document.getElementById('telaAceita').style.display = 'flex';
+    }, 4000);
+  } else {
+    alert(`Corrida com ${nomeMotorista} solicitada!`);
+  }
+}
+
+function irParaTelaCorrida() {
+
+  alert("Indo para a tela de corrida..."); 
+   window.location.href = "tela_espera_corrida.html";
+}
+
+  </script>
+</body>
+</html>

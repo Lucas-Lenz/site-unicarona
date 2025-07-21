@@ -1,0 +1,315 @@
+<!DOCTYPE html>  
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Histórico de Corridas</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #fff;
+      margin: 0;
+      padding: 20px 20px 0 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Topo */
+    .header {
+      background-color: #1e3d6b;
+      width: 100%;
+      height: 70px;
+      border-bottom-left-radius: 50px;
+      border-bottom-right-radius: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 0 20px;
+      box-sizing: border-box;
+      color: white;
+      font-weight: 700;
+      font-size: 24px;
+      font-family: 'Poppins', sans-serif;
+      z-index: 1000;
+    }
+
+    .header .back-button {
+      position: absolute;
+      left: 20px;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .header .back-button:hover {
+      text-decoration: underline;
+    }
+
+    /* Espaço para o topo fixo */
+    .spacer-top {
+      height: 70px;
+      width: 100%;
+    }
+
+    h1 {
+      font-weight: 700;
+      margin-bottom: 20px;
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.5rem;
+      margin-top: 0;
+    }
+
+    .icon-historico {
+      width: 24px;
+      height: 24px;
+      stroke: #274b82;
+      flex-shrink: 0;
+    }
+
+    .corrida-card {
+      border: 1.5px solid #000;
+      border-radius: 12px;
+      padding: 15px 20px;
+      margin-bottom: 15px;
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+    }
+
+    .corrida-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.9rem;
+      min-width: 240px;
+    }
+
+    .linha {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .label {
+      font-weight: 600;
+      width: 80px;
+      flex-shrink: 0;
+    }
+
+    .valor {
+      font-weight: 700;
+      color: #28a745;
+    }
+
+    .botao-abrir {
+      background-color: #274b82;
+      border: none;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      flex-shrink: 0;
+      font-size: 0.85rem;
+    }
+
+    .botao-abrir:hover {
+      background-color: #1e355b;
+    }
+
+    #ver-mais-btn {
+      background-color: #274b82;
+      border: none;
+      color: white;
+      padding: 12px 30px;
+      border-radius: 30px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+      max-width: 400px;
+      width: 100%;
+      transition: background-color 0.3s;
+    }
+
+    #ver-mais-btn:hover {
+      background-color: #1e355b;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="#" class="back-button" id="voltarBtn">Voltar</a>
+    unicarona
+  </header>
+
+  <div class="spacer-top"></div>
+
+  <h1>
+    Histórico de corridas:
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon-historico">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+    </svg>
+  </h1>
+
+  <div id="lista-corridas">
+    <!-- Cards vão aparecer aqui via JS -->
+  </div>
+
+  <button id="ver-mais-btn">Ver mais</button>
+
+  <script>
+    const corridas = [
+      { endereco: "UNIRIO CCHS", data: "28/07", horario: "13:32", gorjeta: "R$ 5,90", motorista: "Douglas Eduardo" },
+      { endereco: "Rua das Flores, 123", data: "27/07", horario: "09:15", gorjeta: "R$ 2,00", motorista: "Maria Silva" },
+      { endereco: "Av. Brasil, 456", data: "26/07", horario: "18:45", gorjeta: "R$ 3,50", motorista: "José Carlos" },
+      { endereco: "Praça Central, 10", data: "25/07", horario: "20:10", gorjeta: "R$ 4,00", motorista: "Ana Beatriz" },
+      { endereco: "Estação de Trem", data: "24/07", horario: "07:30", gorjeta: "R$ 1,00", motorista: "Rafael Gomes" },
+      { endereco: "Shopping Center", data: "23/07", horario: "14:20", gorjeta: "R$ 3,00", motorista: "Juliana Pereira" },
+      { endereco: "Hospital Municipal", data: "22/07", horario: "11:00", gorjeta: "R$ 2,50", motorista: "Carlos Alberto" }
+    ];
+
+    const corridasPorPagina = 3;
+    let paginaAtual = 0;
+    let mostrandoTodos = false;
+
+    const listaCorridas = document.getElementById("lista-corridas");
+    const botaoVerMais = document.getElementById("ver-mais-btn");
+
+    function criarCard(corrida, index) {
+      const card = document.createElement("div");
+      card.className = "corrida-card";
+
+      const info = document.createElement("div");
+      info.className = "corrida-info";
+
+      // Linha Endereço
+      const linhaEndereco = document.createElement("div");
+      linhaEndereco.className = "linha";
+      const labelEndereco = document.createElement("div");
+      labelEndereco.className = "label";
+      labelEndereco.textContent = "Endereço";
+      const valorEndereco = document.createElement("div");
+      valorEndereco.textContent = corrida.endereco;
+      linhaEndereco.appendChild(labelEndereco);
+      linhaEndereco.appendChild(valorEndereco);
+
+      // Linha Data e Horário
+      const linhaDataHorario = document.createElement("div");
+      linhaDataHorario.className = "linha";
+      const labelData = document.createElement("div");
+      labelData.className = "label";
+      labelData.textContent = "Data";
+      const valorData = document.createElement("div");
+      valorData.textContent = corrida.data;
+      const labelHorario = document.createElement("div");
+      labelHorario.className = "label";
+      labelHorario.textContent = "Horário";
+      const valorHorario = document.createElement("div");
+      valorHorario.textContent = corrida.horario;
+
+      linhaDataHorario.appendChild(labelData);
+      linhaDataHorario.appendChild(valorData);
+      linhaDataHorario.appendChild(labelHorario);
+      linhaDataHorario.appendChild(valorHorario);
+
+      // Linha Gorjeta e motorista
+      const linhaGorjetaMotorista = document.createElement("div");
+      linhaGorjetaMotorista.className = "linha";
+      const labelGorjeta = document.createElement("div");
+      labelGorjeta.className = "label";
+      labelGorjeta.textContent = "Valor";
+      const valorGorjeta = document.createElement("div");
+      valorGorjeta.className = "valor";
+      valorGorjeta.textContent = corrida.gorjeta;
+      const valorMotorista = document.createElement("div");
+      valorMotorista.style.marginLeft = "auto";
+      valorMotorista.style.fontWeight = "600";
+      valorMotorista.textContent = corrida.motorista;
+
+      linhaGorjetaMotorista.appendChild(labelGorjeta);
+      linhaGorjetaMotorista.appendChild(valorGorjeta);
+      linhaGorjetaMotorista.appendChild(valorMotorista);
+
+      info.appendChild(linhaEndereco);
+      info.appendChild(linhaDataHorario);
+      info.appendChild(linhaGorjetaMotorista);
+
+      // Botão Abrir
+      const botaoAbrir = document.createElement("button");
+      botaoAbrir.className = "botao-abrir";
+      botaoAbrir.textContent = "Abrir";
+
+      if (index === 0) {
+        botaoAbrir.onclick = () => {
+          window.location.href = "tela_abrir.html";
+        };
+      } else {
+        botaoAbrir.style.cursor = "default";
+      }
+
+      card.appendChild(info);
+      card.appendChild(botaoAbrir);
+
+      return card;
+    }
+
+    function carregarCorridas() {
+      if (!mostrandoTodos) {
+        const inicio = paginaAtual * corridasPorPagina;
+        const fim = inicio + corridasPorPagina;
+        const corridasParaMostrar = corridas.slice(inicio, fim);
+
+        corridasParaMostrar.forEach((corrida, i) => {
+          const card = criarCard(corrida, inicio + i);
+          listaCorridas.appendChild(card);
+        });
+
+        paginaAtual++;
+
+        if (paginaAtual * corridasPorPagina >= corridas.length) {
+          botaoVerMais.textContent = "Ver menos";
+          mostrandoTodos = true;
+        }
+      } else {
+        listaCorridas.innerHTML = "";
+        paginaAtual = 0;
+        mostrandoTodos = false;
+        botaoVerMais.textContent = "Ver mais";
+        carregarCorridas();
+      }
+    }
+
+    botaoVerMais.addEventListener("click", carregarCorridas);
+
+    // Carrega a primeira página ao iniciar
+    carregarCorridas();
+
+     // Script para ajustar o botão Voltar com base na origem
+    const params = new URLSearchParams(window.location.search);
+    const origem = params.get("origem");
+
+    const voltarBtn = document.getElementById("voltarBtn");
+
+    if (origem === "tela_home_motorista") {
+      voltarBtn.href = "tela_home_motorista.html";
+    } else {
+      voltarBtn.href = "tela_home_passageiro.html";
+    }
+ 
+  </script>
+</body>
+</html>

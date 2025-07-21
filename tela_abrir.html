@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Detalhes da Corrida</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: #fff;
+    }
+
+    header {
+      background-color: #1e3d6b;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      border-bottom-left-radius: 60px;
+      border-bottom-right-radius: 60px;
+    }
+
+    header h1 {
+      color: white;
+      font-size: 28px;
+      text-transform: lowercase;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .voltar {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;
+      color: white;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .voltar:hover {
+      text-decoration: underline;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .card {
+      border: 2px solid #000;
+      border-radius: 16px;
+      padding: 16px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 2px 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .card p {
+      margin: 6px 0;
+    }
+
+    .link {
+      color: #3498db;
+      text-decoration: none;
+    }
+
+    .botao {
+      background-color: #1c3c6d;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 16px;
+      margin-top: 8px;
+      cursor: pointer;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+      font-size: 14px;
+      width: 100%;
+    }
+
+    .botao:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .gorjeta {
+      margin-top: 16px;
+    }
+
+    .gorjeta input {
+      padding: 8px;
+      border-radius: 16px;
+      border: 2px solid #ccc;
+      width: 100%;
+      max-width: 280px;
+      box-sizing: border-box;
+    }
+
+    .botao-enviar {
+      margin-top: 10px;
+      display: none;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <button class="voltar" onclick="window.location.href='tela_historico_corridas.html'">Voltar</button>
+    <h1>unicarona</h1>
+  </header>
+
+  <main>
+    <div class="card">
+      <p><strong>Origem:</strong> Botafogo Praia Shopping</p>
+      <p><strong>Destino:</strong> UNIRIO CCHS</p>
+      <p><strong>Horário:</strong> 13:32 &nbsp; &nbsp; 28/07/2025</p>
+      <p><strong>Valor:</strong> R$ 5,90</p>
+      <p><strong>Motorista:</strong> <a class="link" href="tela_usuario_motorista.html">Douglas Eduardo Silva</a></p>
+      <p><strong>Avaliação:</strong> <span id="avaliacaoTexto">Sem avaliação</span></p>
+
+      <button class="botao" onclick="window.location.href='tela_avaliacao.html'">Avaliar</button>
+      <button class="botao" onclick="window.location.href='tela_denuncia.html'">Denunciar viagem</button>
+
+      <div class="gorjeta">
+        <p><strong>Adicionar gorjeta:</strong></p>
+        <input type="number" id="inputGorjeta" placeholder="Insira valor da gorjeta (R$)" />
+        <button class="botao botao-enviar" id="botaoEnviar" onclick="enviarGorjeta()">Enviar</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const inputGorjeta = document.getElementById('inputGorjeta');
+    const botaoEnviar = document.getElementById('botaoEnviar');
+    const avaliacaoTexto = document.getElementById('avaliacaoTexto');
+
+    // Mostra botão de enviar se a gorjeta for maior que 0
+    inputGorjeta.addEventListener('input', () => {
+      const valor = parseFloat(inputGorjeta.value);
+      botaoEnviar.style.display = (valor > 0) ? 'inline-block' : 'none';
+    });
+
+    function enviarGorjeta() {
+      alert('Gorjeta enviada!');
+      botaoEnviar.style.display = 'none';
+      inputGorjeta.value = '';
+    }
+
+    // Verifica se já tem avaliação salva e exibe
+    window.addEventListener('DOMContentLoaded', () => {
+      const estrelas = localStorage.getItem('avaliacaoEstrelas');
+      if (estrelas && !isNaN(estrelas)) {
+        const n = parseInt(estrelas);
+        if (n > 0) {
+          avaliacaoTexto.innerText = `${n} estrela${n > 1 ? 's' : ''}`;
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>

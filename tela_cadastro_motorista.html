@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Unicarona - Cadastro Motorista</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* MESMO CSS que você já conhece do cadastro passageiro, ajustado para motorista */
+    * {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: white;
+      display: flex; flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .header {
+      background-color: #1e3d6b;
+      width: 100%;
+      height: 80px;
+      border-bottom-left-radius: 40px;
+      border-bottom-right-radius: 40px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      color: white;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .back-button {
+      position: absolute;
+      left: 20px;
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    .form-container {
+      width: 100%;
+      max-width: 360px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .profile-section {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .profile-pic {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 2px solid #1e3d6b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #666;
+      text-align: center;
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    .input-group {
+      width: 100%;
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+    }
+
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 30px;
+      border: 2px solid #1e3d6b;
+      font-size: 14px;
+      background-color: #f1f1f1;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: #1e3d6b;
+    }
+
+    input.error, select.error {
+      border-color: red !important;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-bottom: 12px;
+      display: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .submit-btn {
+      margin-top: 20px;
+      width: 60%;
+      padding: 12px;
+      background-color: #1e3d6b;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 2px 4px 6px rgba(0,0,0,0.1);
+      transition: background-color 0.3s;
+    }
+
+    #fotoInput {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <a href="tela_bem-vindo.html" class="back-button">Voltar</a>
+    <h1>unicarona</h1>
+  </div>
+
+  <form id="formCadastroMotorista" class="form-container" novalidate>
+    <label style="align-self: flex-start; margin-bottom: 5px;">Perfil</label>
+    <div class="profile-section">
+      <label for="fotoInput" class="profile-pic">Inserir<br>Foto</label>
+      <input type="file" id="fotoInput" accept="image/*" />
+      <div class="input-group" style="flex-grow:1;">
+        <label for="nomeInput">Nome</label>
+        <input type="text" id="nomeInput" placeholder="Seu nome" />
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label for="dataNascimentoInput">Data de nascimento</label>
+      <input type="text" id="dataNascimentoInput" placeholder="dd/mm/aaaa" />
+    </div>
+
+    <div class="input-group">
+      <label for="telefoneInput">Número de celular</label>
+      <input type="text" id="telefoneInput" placeholder="(00) 00000-0000" />
+    </div>
+
+    <div class="input-row">
+      <div class="input-group" style="flex: 1;">
+        <label for="cursoInput">Curso</label>
+        <input type="text" id="cursoInput" placeholder="Seu curso" />
+      </div>
+      <div class="input-group" style="flex: 1;">
+        <label for="generoSelect">Gênero</label>
+        <select id="generoSelect">
+          <option value="">Selecione</option>
+          <option value="masculino">Masculino</option>
+          <option value="feminino">Feminino</option>
+          <option value="nao-binario">Não-Binário</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label for="cnhInput">CNH</label>
+      <input type="text" id="cnhInput" placeholder="Número da CNH" />
+    </div>
+
+    <div class="error-message" id="errorMsg">⚠️ Por favor, preencha todos os campos obrigatórios.</div>
+
+    <button type="submit" class="submit-btn">Prosseguir</button>
+  </form>
+
+  <script>
+    const form = document.getElementById("formCadastroMotorista");
+    const errorMsg = document.getElementById("errorMsg");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      errorMsg.style.display = "none";
+
+      const camposObrigatorios = [
+        document.getElementById("nomeInput"),
+        document.getElementById("dataNascimentoInput"),
+        document.getElementById("telefoneInput"),
+        document.getElementById("cursoInput"),
+        document.getElementById("generoSelect"),
+        document.getElementById("cnhInput")
+      ];
+
+      let formValido = true;
+
+      camposObrigatorios.forEach(campo => {
+        if (!campo.value.trim()) {
+          campo.classList.add("error");
+          formValido = false;
+        } else {
+          campo.classList.remove("error");
+        }
+      });
+
+      if (!formValido) {
+        errorMsg.style.display = "block";
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
+      // Redireciona para tela de cadastro do carro
+      window.location.href = "tela_cadastro_carro.html";
+    });
+  </script>
+
+</body>
+</html>

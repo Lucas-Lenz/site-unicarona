@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sobre nós</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .header {
+      background-color: #1e3d6b;
+      width: 100%;
+      height: 80px;
+      border-bottom-left-radius: 40px;
+      border-bottom-right-radius: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin-bottom: 30px;
+    }
+
+    .header h1 {
+      color: white;
+      font-size: 24px;
+      font-weight: 600;
+      font-style: italic;
+    }
+
+    .voltar {
+      position: absolute;
+      left: 20px;
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .voltar:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 360px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .titulo {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <a id="voltarBtn" href="#" class="voltar">Voltar</a>
+    <h1>unicarona</h1>
+  </div>
+
+  <div class="container">
+    <h1 class="titulo">Ajuda</h1>
+
+    <div style="max-width: 700px; margin: 20px auto; padding: 0 20px; text-align: justify; font-size: 16px; color: #1e3d6b; line-height: 1.6;">
+Nosso aplicativo funciona para facilitar o deslocamento dos estudantes da UNIRIO de uma forma acessível, ou seja, o valor tende a ser pequeno com o intuito de pagar apenas a gasolina. Caso queira ajudar com um valor maior, é só adicionar gorjeta ao final da corrida.
+<br>&bull; Tela "home": temos 4 botões para o passageiro e 6 para o motorista. <br>&bull; Para ambos, temos o botão de ver quais professores vão faltar e quais vão estar presentes, temos o botão de ver a previsão do clima do dia e da semana, o botão para acessar rotas e ver pontos perigosos na parte do mapa, além dos botões de ver histórico de corridas e pedir corridas.<br>&bull; Para o motorista, ele tem os botões de criar corrida e enviar comunicado para os passageiros.
+<br>&bull; Na opção de Menu no canto superior direito da página "home", existem as funções de abrir perfil, ver sobre nós idealizadores do projeto, ajuda para a utilização do sistema, sair do aplicativo e visualizar notificações.
+</div>
+
+    
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const origem = params.get("origem");
+
+    const voltarBtn = document.getElementById("voltarBtn");
+
+    if (origem === "tela_home_motorista") {
+      voltarBtn.href = "tela_home_motorista.html";
+    } else if (origem === "tela_home_passageiro") {
+      voltarBtn.href = "tela_home_passageiro.html";
+    } else {
+      voltarBtn.href = "tela_home_passageiro.html"; // fallback
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Unicarona - Nova Senha</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .header {
+      background-color: #1e3d6b;
+      width: 100%;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      border-bottom-left-radius: 60px;
+      border-bottom-right-radius: 60px;
+    }
+
+    .header h1 {
+      color: white;
+      font-size: 28px;
+      text-transform: lowercase;
+      font-weight: 600;
+    }
+
+    .back-button {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: transparent;
+      color: white;
+      padding: 10px 22px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 600;
+      transition: text-decoration 0.3s;
+    }
+
+    .back-button:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      margin-top: 60px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #1e3d6b;
+      border-radius: 30px;
+      font-size: 16px;
+      background-color: #f1f1f1;
+      outline: none;
+      transition: border 0.3s;
+    }
+
+    .input-group input.error {
+      border-color: red;
+    }
+
+    .submit-btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 30px;
+      background-color: #ccc;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      box-shadow: 2px 4px 6px rgba(0,0,0,0.2);
+      transition: background-color 0.3s;
+      cursor: pointer;
+    }
+
+    .submit-btn.active {
+      background-color: #1e3d6b;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-bottom: 8px;
+      display: none;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <a href="tela_esqueci_senha_codigo.html" class="back-button">Voltar</a>
+    <h1>unicarona</h1>
+  </div>
+
+  <div class="container">
+    <div class="error-message" id="erroSenhas">⚠️ As senhas devem ser iguais</div>
+
+    <div class="input-group">
+      <input type="password" id="novaSenha" placeholder="Nova senha">
+    </div>
+
+    <div class="input-group">
+      <input type="password" id="confirmarSenha" placeholder="Confirmar nova senha">
+    </div>
+
+    <button id="btnRedefinir" class="submit-btn">Redefinir senha</button>
+  </div>
+
+  <script>
+    const novaSenha = document.getElementById("novaSenha");
+    const confirmarSenha = document.getElementById("confirmarSenha");
+    const btnRedefinir = document.getElementById("btnRedefinir");
+    const erroSenhas = document.getElementById("erroSenhas");
+
+    function atualizarBotao() {
+      const senha1 = novaSenha.value.trim();
+      const senha2 = confirmarSenha.value.trim();
+
+      if (senha1 && senha2) {
+        btnRedefinir.classList.add("active");
+      } else {
+        btnRedefinir.classList.remove("active");
+        erroSenhas.style.display = "none";
+        novaSenha.classList.remove("error");
+        confirmarSenha.classList.remove("error");
+      }
+    }
+
+    novaSenha.addEventListener("input", atualizarBotao);
+    confirmarSenha.addEventListener("input", atualizarBotao);
+
+    btnRedefinir.addEventListener("click", () => {
+      const senha1 = novaSenha.value.trim();
+      const senha2 = confirmarSenha.value.trim();
+
+      if (!senha1 || !senha2) return;
+
+      if (senha1 !== senha2) {
+        erroSenhas.style.display = "block";
+        novaSenha.classList.add("error");
+        confirmarSenha.classList.add("error");
+      } else {
+        erroSenhas.style.display = "none";
+        novaSenha.classList.remove("error");
+        confirmarSenha.classList.remove("error");
+        alert("Senha redefinida com sucesso!");
+        window.location.href = "tela_inicial.html";
+      }
+    });
+  </script>
+
+</body>
+</html>
